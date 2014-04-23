@@ -9,10 +9,7 @@ $type_act =array();
 $public_vise = array();
 $texte = array();
 
-if (isset($_GET['login']))		//utile?
-	unset($_SESSION['login']);
-// if (isset($_POST['recherche'])) echo "tu as choisi ".$_POST['activites']."et ".$_POST['public'] ;
-// else {
+
 $connexion= new BDD(false);			// le texte de présentation
 $connexion->requete("SELECT * FROM  textes WHERE langue='". $_SESSION['langue'] ."'");
 $textes = $connexion->retourne_tableau();
@@ -21,8 +18,10 @@ foreach ($textes as $value)
 echo "<div id='presentation' >". nl2br($texte['presentation']) . "</div>";
 	
 ?>
- <form method="get" id="barre_recherche" action="<?php echo "activites.php"; ?>" /> 
+ <form method="GET" id="barre_recherche" action="<?php echo "activites.php"; ?>" /> 
 <?php
+//echo "Types d'activité";
+
 		// on fait le select "activités" de la barre de recherche
 $connexion->requete("SELECT * FROM type_act"); 		
 	  
@@ -34,15 +33,17 @@ foreach ($type_act as $value) {
 }
 echo "</select>\n";
 
+//echo "Tranches d'age";
+
 		// on fait le select "public visé" de la barre de recherche
 $connexion->requete("SELECT * FROM public_vise");  
 $public_vise = $connexion->retourne_tableau(); //var_dump($public_vise);
-echo '<select id="public" name="public">';
+echo "<select id='public' name='public'>\n";
 echo "\t<option value='1'> Tout public </option>\n";
 foreach ($public_vise as $value) {
-	echo '\t<option value="'. $value["id_publicvise"] .'"> ' . $value["public_affich"] .' </option>\n';
+	echo "\t<option value='". $value['id_publicvise'] ."'> " . $value['public_affich'] ." </option>\n";
 }
-echo '</select>';
+echo "</select>\n";
 
 ?>
  <script>

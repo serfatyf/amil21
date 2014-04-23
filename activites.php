@@ -62,11 +62,13 @@ $activite=array();
 
 //if (isset($_GET['recherche'])){
 
-if (isset($_GET['type']))
-	$type =	$_GET['type'];
-else $type = '1';
 
-if (isset($_GET['public']))
+
+if (isset($_GET['type']))	// si on a choisi un type (qui correspond à un nombre) 
+	$type =	$_GET['type'];	// le type est le nbr choisi
+else $type = '1';			// sinon le type est 1, qui correspond à la recherche "tous types" 
+
+if (isset($_GET['public']))		// idem pour le public
 	$public =	$_GET['public'];
 else $public = '1';
 
@@ -85,6 +87,7 @@ else $public = '1';
 				// echo "<pre> type_act:";print_r($type_act); echo "</pre><br/>";
 				// echo "<pre> icones_act:";print_r($icones_act); echo "</pre><br/>";
 
+	// requete renvoyant le choix d'activite fait par l'utilisateur
 if (isset($type) && isset($public)){
 	$connexion_stmt = new BDD();
 
@@ -158,19 +161,23 @@ if (isset($type) && isset($public)){
 		//on va faire les boutons de selection de type
 $connexion = new BDD(false);
 $connexion->requete("SELECT * FROM type_act"); 		/*on recupere pour cela la table des types d'activites*/
-$type_act = $connexion->retourne_tableau(); /*var_dump($type_act)*/;
+$type_act = $connexion->retourne_tableau(); echo "type_act";var_dump($type_act);
+
+
 ?>
-<form method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>" >
 <div>
+<form method="GET" action=" <?php echo 'activites.php' ?>" >
+	
 		<!-- si type=1, cad pr le choix de 'tous', le bouton correspondant prend sa classe -->
-	<button id="1" <?php if ($type=='1') echo " class='checked'" ?> >Tous types</button></form>
+	<button id="1" name="type" value="1" <?php if ($type=='1') echo " class='checked'" ?> >Tous types</button></form>
 <?php 
-		// pr chaque bouton, hors 'tous', si il est cliqué il prend class='checked', synonyme de coloration
+		// pr chaque bouton, hors 'tous' puisque fait au dessus,
+			// si il est cliqué il prend class='checked', synonyme de coloration
 	foreach ($type_act as $value) {
 		
-		echo "\t<form method='GET' action='". $_SERVER['PHP_SELF']."'>"; 
-		echo "<button id='". $value['id_typeact'] ."'";
-		if ($value['id_typeact'] == $type) echo " class='checked'>";
+		echo "\t<form method='GET' action='activites.php'>"; 
+		echo "<button id='". $value['id_typeact'] ."' name='type' value='". $value['id_typeact'] ."'";
+		if ($value['id_typeact'] == $type) echo " class='checked'";
 		else echo ">";
 		echo $value['type_affich'] ." </button></form>\n";
 	}

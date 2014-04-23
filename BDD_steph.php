@@ -22,7 +22,7 @@ class BDD {
 	private $last_id; // ID dernier insert
 
 	public function __construct($statement=true) // preciser false si requete simple, rien pr stmt
-	{
+	{ 
 
 
 		

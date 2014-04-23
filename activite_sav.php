@@ -5,7 +5,7 @@ include "header.php";
 
 if (isset($_SESSION['type'])) {
 	$stmt = $connexion->get_stmt();
-	mysqli_stmt_prepare($stmt,"SELECT titre, presentation, date_fin_inscription, ville_act, departement_act,
+	mysqli_stmt_prepare($stmt,"SELECT titre, presentation_act, date_fin_inscription, ville_act, departement_act,
 	  lieu_act, lieu_rdv, date_act, heure_act, heure_rdv, heure_fin, photo, date_parution FROM act WHERE id=?");
 	mysqli_stmt_bind_param($stmt, "i", $id);
 	$id = $_SESSION['id'];   //ou "$_GET['" . id . "']";

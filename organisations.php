@@ -8,12 +8,12 @@ $orga = array();
 
 
 $connexion = new BDD();
-$sql = "SELECT id_orga, nom_orga, adresse, presentation, logo FROM organisation"; 
+$sql = "SELECT id_orga, nom_orga, adresse, presentation_orga, logo FROM organisation"; 
 $connexion->prepare($sql);
 $result = $connexion->execute(); echo "result_test:"; var_dump($result);
 foreach ($result as $value) {
 	echo "<a href='organisation.php?id=".$value['id_orga']."'> ".$value['nom_orga'] ."</a>";
-	echo "<p>".$value['adresse'].$value['presentation']."</p>" ;
+	echo "<p>".$value['adresse'].$value['presentation_orga']."</p>" ;
 	// echo "<img src='/images/".$value['logo']."> ";
  
 }

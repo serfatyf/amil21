@@ -11,7 +11,7 @@ echo "GET:";  var_dump($_GET);
 
 if (isset($_SESSION['pseudo'])) {
 	$connexion_stmt = new BDD();
-	$sql = "SELECT titre, presentation, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, heure_rdv, heure_fin, photo, date_parution FROM act 
+	$sql = "SELECT titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, heure_rdv, heure_fin, photo, date_parution FROM act 
 				WHERE id_act=?"; 
 	$bind = "i";
 	$arr= array($_GET["id"]); echo "arr:"; var_dump($arr);

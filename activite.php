@@ -20,11 +20,14 @@ if ( ( /*isset($_SESSION['genre']) && $_SESSION['genre'] == 'membre'
 	if(!isset($_GET['id'])) {	
 		?><h2>Impossible de trouver cette activité.</h2><?php
 	} 
-	else {
-		$connexion_stmt = new BDD();	//rajouter age et date de naissance, presentation
-		$sql = "SELECT titre, presentation, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo FROM act
-					INNER JOIN participant ON id_act = id_participant_act 
-					INNER JOIN membre ON id_participant_membre = id_membre	
+	else {		// fiche de l'acivite, meme si on n'y est pas inscrit (ne marche pas avec INNER!)
+		// j'ai pris 
+		$connexion_stmt = new BDD();								//rajouter age et date de naissance, presentation_membre
+	// une activite, ds la table de gauche, doit etre affichée 
+		// meme si la table de droite est vide, à savoir si un membre n'y est pas inscrit => LEFT JOIN
+		$sql = "SELECT titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
+					LEFT JOIN participant ON id_act = id_participant_act 
+					LEFT JOIN membre ON id_participant_membre = id_membre	
 				WHERE id_act=?";
 	
 		$bind = "i";
@@ -38,23 +41,32 @@ if ( ( /*isset($_SESSION['genre']) && $_SESSION['genre'] == 'membre'
 			// else $identite = ucfirst($_SESSION['pseudo']);
 			
 			echo "<h1>".$result[0]['titre']."</h1>" ; 
-			echo "<h2>".$result[0]['presentation']."</h2>" ; 
+			echo "<h2>".$result[0]['presentation_act']."</h2>" ; 
 			echo $result[0]['date_act'];
 			echo "s'inscrire avant le ". $result[0]['date_fin_inscription'];	
 			echo $result[0]['lieu_act']; 
 			echo "<h2> Liste des participants </h2>";
 		// "carte de visite" des inscrits à l'activité
-			//	avec la photo si donnée par le membre, ou une icone sexuée (images dans le repertoire 'photos')	
-			// if ($result[0]['photo'] != "")
-			// 	echo "<img src='/photos/".$result[0]['photo'] . " alt='photo de ".$identite. "' />";
-			// else {
-			// 	if ($_SESSION['sexe'] == 0)
-			// 		echo "<img src='/photos/ico_homme.png' alt='icone d'un homme' />";
-			// 	else echo "<img src='/photos/ico_femme.png' alt='icone d'une femme' />";
-			// }
+		//		avec la photo si donnée par le membre, ou une icone sexuée (images dans le repertoire 'photos')	
+			foreach ($result as $value) {
+				if ($value['photo'] != "")
+					echo "<img src='/photos/".$value['photo'] . " alt='photo de ".$identite. "' />";
+				// else {
+				// 		if ($_SESSION['sexe'] == 0)
+				// 			echo "<img src='/photos/ico_homme.png' alt='icone d'un homme' />";
+				// 		else echo "<img src='/photos/ico_femme.png' alt='icone d'une femme' />";
+				// }
+				if ($value['nom'] !="" || $value['prenom'] !="")
+					echo ucfirst($value['prenom'])." ".strtoupper($value['nom']);
+				else echo ucfirst($value['pseudo']);				
+
+
+			}
+
+			
 		?>
 		
-		<form action='' method='POST'>
+		<form action='<?php echo $_SERVER['PHP_SELF'];?>' method='POST'>
 			
 			<input type='submit' name='inscrip' value="S'inscrire"/>
 		</form>

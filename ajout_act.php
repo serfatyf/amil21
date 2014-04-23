@@ -8,7 +8,7 @@ if ( isset($_SESSION['nom_orga']) && isset($_SESSION['id_orga'])) {
 
 if (isset($_POST['ajout'])) {
 	$connexion_stmt = new BDD();
-	$sql = "INSERT INTO act (titre, id_act_publicvise, id_act_typeact, presentation, date_act, heure_act, duree, lieu_act, ville_act, departement_act, lieu_rdv, heure_rdv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$sql = "INSERT INTO act (titre, id_act_publicvise, id_act_typeact, presentation_act, date_act, heure_act, duree, lieu_act, ville_act, departement_act, lieu_rdv, heure_rdv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	$bind ="ssssssssssssi";
 	//$result_type = array($_POST['type'] - $nb_public);
 	$arr = array($_POST['titre'], $_POST['public'], $_POST['type'], $_POST['area'], $_POST['date'], $_POST['heure_act'], $_POST['duree'], $_POST['adresse_act'], $_POST['ville'], $_POST['departement'], $_POST['adresse_rdv'], $_POST['heure_rdv'], $_SESSION['id_orga']);
