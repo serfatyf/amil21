@@ -1,5 +1,8 @@
 <?php
 include "config.php";
+
+	//connexion en tant que membre ou organisation
+
 if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'])){
 	
 	$connexion_stmt = new BDD();
@@ -13,8 +16,7 @@ if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'
     	if ($result[0]['mdp']==$_POST['mdp']) {
     		$_SESSION['pseudo'] = $result[0]['pseudo'];	// on ouvre les sessions utiles
     		$_SESSION['id_membre'] = $result[0]['id_membre'];
-    	//$_SESSION['genre'] = "membre";
-    		$_SESSION['sexe'] = $result[0]['sexe'];
+       		$_SESSION['sexe'] = $result[0]['sexe'];
     		header('location:mon_compte.php');
     	}
     	else {
@@ -33,7 +35,7 @@ if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'
     		if ($result2[0]['mdp']==$_POST['mdp']) {
     			$_SESSION['pseudo'] = $result2[0]['login'];	// on ouvre les sessions utiles
     			$_SESSION['id_membre'] = $result2[0]['id_orga'];
-    	//$_SESSION['genre'] = "membre";
+    	
     			header('location:mon_compte.php');
     		}
     		else {
@@ -50,8 +52,7 @@ echo "POST"; var_dump($_POST);
 $arr = array();
 
 //if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga'])){}
-?>
-
+?>	
 
 <div id="inscription" >
 	<!-- <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" >  -->
@@ -64,28 +65,27 @@ $arr = array();
 		
 
 <?php 
-if (/*isset($_POST['btn_membre'])
-	&&*/ isset($_POST['inscrip_membre'])
+
+		//inscription membre
+
+if ( isset($_POST['inscrip_membre'])
 	&& !empty($_POST['pseudo'])
 	&& !empty($_POST['mail'])
 	&& !empty($_POST['mdp'])
 	&& !empty($_POST['mdp2'])
 	&& $_POST['mdp'] == $_POST['mdp2']) {
-	echo"TEST<br/>";
-//	$pseudo = $_POST["pseudo"]; echo "pseudo:";var_dump($pseudo);
-//	$sexe = $_POST["sexe"];		
-	if ($_POST["sexe"] == "homme") 
-		$sexe = 0;	 
-	else $sexe= 1;
-//	$mail = $_POST["mail"];	echo "mail:";var_dump($mail);	
-//	$mdp = $_POST["mdp"];	echo "mdp:";var_dump($mdp);
 	
-	$connexion_stmt = new BDD();
-	$sql = "INSERT INTO membre (pseudo, sexe, mail, mdp) VALUES (?,?,?,?)";
-	$bind ="siss";
-	$arr = array($_POST['pseudo'], $sexe, $_POST['mail'], $_POST['mdp']);
-	$connexion_stmt->prepare($sql,$bind);
-	$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
+
+		if ($_POST["sexe"] == "homme") 
+			$sexe = 0;	 
+		else $sexe= 1;
+	
+		$connexion_stmt = new BDD();
+		$sql = "INSERT INTO membre (pseudo, sexe, mail, mdp) VALUES (?,?,?,?)";
+		$bind ="siss";
+		$arr = array($_POST['pseudo'], $sexe, $_POST['mail'], $_POST['mdp']);
+		$connexion_stmt->prepare($sql,$bind);
+		$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
 	
 	if ( $result != 0 ) {
     	$_SESSION['pseudo'] = $result[0]['pseudo'];
@@ -114,10 +114,9 @@ else {
 	</form>
 <?php
 }
+		// inscription membre
 
-
-if (/*isset($_POST['btn_orga'])
-	&&*/ isset($_POST['inscrip_orga'])
+if ( isset($_POST['inscrip_orga'])
 	&& !empty($_POST['nom_orga'])  
 	&& !empty($_POST['mail']) 
 	&& !empty($_POST['mdp']) 
@@ -191,7 +190,6 @@ else {
 	$(document).ready(function() {
 	// si le JS est actif, on cache le formulaire des organisations 
 		$("#formu_orga").load().hide();
-	console.log($("#formu_orga"));
 	// choix du formulaire inscription membre ou organisation
 		$("#btn_membre").click(function(){
 			$("#formu_orga").hide();

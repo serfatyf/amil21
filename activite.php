@@ -11,17 +11,13 @@ echo "POST:";  var_dump($_POST);
 echo "sessions:"; var_dump($_SESSION);
 echo "GET:";  var_dump($_GET);
 
-if ( ( /*isset($_SESSION['genre']) && $_SESSION['genre'] == 'membre'
-		&&*/ isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SESSION['sexe']) )
-  
-  //|| ( /*isset($_SESSION['genre']) && $_SESSION['genre'] == 'orga'
-	//	&&*/ isset($_SESSION['nom_orga']) && isset($_SESSION['id_orga']) ) 
-) {
+if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SESSION['sexe']) )) {
+	
 	if(!isset($_GET['id'])) {	
 		?><h2>Impossible de trouver cette activité.</h2><?php
 	} 
 	else {		// fiche de l'acivite, meme si on n'y est pas inscrit (ne marche pas avec INNER!)
-		// j'ai pris 
+		
 		$connexion_stmt = new BDD();								//rajouter age et date de naissance, presentation_membre
 	// une activite, ds la table de gauche, doit etre affichée 
 		// meme si la table de droite est vide, à savoir si un membre n'y est pas inscrit => LEFT JOIN
@@ -35,17 +31,14 @@ if ( ( /*isset($_SESSION['genre']) && $_SESSION['genre'] == 'membre'
 		$connexion_stmt->prepare($sql,$bind); 
 		$result = $connexion_stmt->execute($arr); echo "result:"; var_dump($result);
 		if(count($result) > 0) {
-		// preparation de la "carte de visite" des inscrits
-			// if ($result[0]['nom']!="" || $result[0]['prenom']!"")
-			// 	$identite = ucfirst($result[0]['prenom'])." ".ucfirst($result[0]['nom']);
-			// else $identite = ucfirst($_SESSION['pseudo']);
-			
+					
 			echo "<h1>".$result[0]['titre']."</h1>" ; 
 			echo "<h2>".$result[0]['presentation_act']."</h2>" ; 
 			echo $result[0]['date_act'];
 			echo "s'inscrire avant le ". $result[0]['date_fin_inscription'];	
 			echo $result[0]['lieu_act']; 
 			echo "<h2> Liste des participants </h2>";
+		
 		// "carte de visite" des inscrits à l'activité
 		//		avec la photo si donnée par le membre, ou une icone sexuée (images dans le repertoire 'photos')	
 			foreach ($result as $value) {
