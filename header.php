@@ -38,14 +38,16 @@
 <body>
 <div id="page">
 <ul>	
-	<li> <a href='index.php'> Accueil </a></li>
-	<li> <a href='organisations.php'> Les organisations </a> </li>
+	<span><li>  <a href='index.php'> Accueil </a></li></span>
+	<span><li> <a href="activites.php"> Activités</a> </li> </span>
+	<span><li>  <a href='organisations.php'> Les organisations </a> </li></span>
+
 	<?php 		//si je suis connecté, le bouton deco est affiché
 		if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga']))  
-			echo "<li> <a href='deconnexion.php'> Déconnexion</a> </li>";
+			echo "<span><li>  <a href='deconnexion.php'> Déconnexion</a> </li></span>";
 				
 				// si je suis deconnecté, il y a le bouton connexion en haut de page
-		else echo "<li> <a href='inscription.php'> Inscription / Connexion</a> </li>"; 
+		else echo "<span><li> <a href='inscription.php'> Inscription / Connexion</a> </li></span>"; 
 	?>
 </ul>
 <a id="logo" href="index.php"><img src="index.png" alt="logo, lien vers l'accueil"></a>

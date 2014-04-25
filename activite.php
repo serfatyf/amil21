@@ -14,7 +14,11 @@ echo "GET:";  var_dump($_GET);
 if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SESSION['sexe']) )) {
 	
 	if(!isset($_GET['id'])) {	
-		?><h2>Impossible de trouver cette activité.</h2><?php
+		?>
+		
+		<h2>Impossible de trouver cette activité.</h2>
+		
+		<?php
 	} 
 	else {		// fiche de l'acivite, meme si on n'y est pas inscrit (ne marche pas avec INNER!)
 		
@@ -30,7 +34,7 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 		$arr= array($_GET["id"]); echo "arr:"; var_dump($arr);
 		$connexion_stmt->prepare($sql,$bind); 
 		$result = $connexion_stmt->execute($arr); echo "result:"; var_dump($result);
-		if(count($result) > 0) {
+		if(count($result) > 0) {		// utile? si $_GET['id'] est setté, il y a forcement une act
 					
 			echo "<h1>".$result[0]['titre']."</h1>" ; 
 			echo "<h2>".$result[0]['presentation_act']."</h2>" ; 
@@ -42,8 +46,9 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 		// "carte de visite" des inscrits à l'activité
 		//		avec la photo si donnée par le membre, ou une icone sexuée (images dans le repertoire 'photos')	
 			foreach ($result as $value) {
-				if ($value['photo'] != "")
+				if ($value['photo'] != "") {
 					echo "<img src='/photos/".$value['photo'] . " alt='photo de ".$identite. "' />";
+				}
 				// else {
 				// 		if ($_SESSION['sexe'] == 0)
 				// 			echo "<img src='/photos/ico_homme.png' alt='icone d'un homme' />";
@@ -59,23 +64,24 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 			
 		?>
 		
-		<form action='<?php echo $_SERVER['PHP_SELF'];?>' method='POST'>
+		<form action='<?php echo "activite.php?id=".$_GET['id'];?>' method='POST'>
 			
 			<input type='submit' name='inscrip' value="S'inscrire"/>
 		</form>
 
 		<?php
 		if (isset($_POST['inscrip'])) {
-		 		$sql = "INSERT INTO participant (id_participant_act , id_participant_membre) VALUES (?, ?)" ;
-		 		$bind = "ii";
-		 		$arr = array($_GET['id'], $_SESSION['id_membre']);echo "array";var_dump($arr);
-		 		$arr_prep=	$connexion_stmt->prepare($sql,$bind); 
-				$result = $connexion_stmt->execute($arr); 
-				if ($result==0) echo "pas d'inscription"; 
-				else echo "bravo";
+		 	$sql = "INSERT INTO participant (id_participant_act , id_participant_membre) VALUES (?, ?)" ;
+		 	$bind = "ii";
+		 	$arr = array($_GET['id'], $_SESSION['id_membre']);echo "array";var_dump($arr);
+		 	$arr_prep=	$connexion_stmt->prepare($sql,$bind); 
+			$result = $connexion_stmt->execute($arr); 
+			if ($result==0) 
+				echo "erreur dans l'inscription"; 
+			else echo "bravo, vous êtes inscrit";
 		} 
 		
-		} 
+		} //?
 
 		else {
 			?>
@@ -92,7 +98,7 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 else {
 	?> 
 
-	<h2>Vous devez être connecté(e) pour avoir plus d'informations sur cette activité</h2>
+	<h2>Vous devez être connecté(e) pour avoir des informations sur une activité</h2>
 	<p>Pseudo: <input type="text" id="pseudo"/></p>
 	<p>Mot de passe: <input type="text" id="mdp" size="10"/></p>
 	<p><input type="button" id="btn_connect" value="Valider"/></p>

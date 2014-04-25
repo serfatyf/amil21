@@ -3,7 +3,6 @@ include "config.php";
 
 include "header.php";
 
-$icones_act=array();
 $activite=array();
 
 if (isset($_GET['type']))	// si on a choisi un type (qui correspond à un nombre) 
@@ -16,7 +15,6 @@ else $public = '1';
 
 
 // requete renvoyant le choix d'activite fait par l'utilisateur
-if (isset($type) && isset($public)){		// C'EST FORCEMENT SET VU QUE TU LUI DONNE UNE VALEUR AU DESSUS ... INUTILE DONC
 	$connexion_stmt = new BDD();
 
 	$bind = "";
@@ -55,7 +53,7 @@ if (isset($type) && isset($public)){		// C'EST FORCEMENT SET VU QUE TU LUI DONNE
 //on va faire les boutons de selection de type
 $connexion = new BDD(false);
 $connexion->requete("SELECT * FROM type_act"); 		/*on recupere pour cela la table des types d'activites*/
-$type_act = $connexion->retourne_tableau(); echo "type_act";var_dump($type_act);
+$type_act = $connexion->retourne_tableau(); 
 
 //ici on va faire les radio de selection du public visé
 $connexion->requete("SELECT * FROM public_vise");
@@ -65,9 +63,13 @@ $public_vise = $connexion->retourne_tableau();
 ?>
 <div>
 <a href="activites.php?type=1&public=<?php echo $public; ?>"><span <?php if ($type=='1') echo ' class="checked"'; ?>>Tous types</span></a>
-<?php foreach ($type_act as $value) {		// pr chaque bouton, hors 'tous' puisque fait au dessus, si il est cliqué il prend class='checked', synonyme de coloration ?>
+<?php 
+foreach ($type_act as $value) {		// pr chaque bouton, hors 'tous' puisque fait au dessus, si il est cliqué il prend class='checked', synonyme de coloration 
+?>
 	<a href="activites.php?type=<?php echo $value['id_typeact']; ?>&public=<?php echo $public; ?>"><span <?php if ($type==$value['id_typeact']) echo 'class="checked"'; ?>><?php echo $value['type_affich']; ?></span></a>
-<?php } ?>
+<?php
+}
+ ?>
 </div>
 
 		
@@ -78,8 +80,3 @@ $public_vise = $connexion->retourne_tableau();
 <?php } ?>
 </div>
 
-<?php 
-
-}
-
-?>
