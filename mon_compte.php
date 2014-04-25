@@ -74,14 +74,14 @@ $id_membre = $_SESSION['id_membre'];
 <?php 
 	$connexion = new BDD(false);
 	$connexion->requete( "SELECT id_act, titre, presentation_act, date_fin_inscription, date_act, heure_act, id_act_typeact, nom_orga FROM act
-							INNER JOIN type_act ON id_act = id_act_typeact
-							INNER JOIN participant ON id_act = id_participant_act
-							INNER JOIN organisation ON id_orga = id_act_orga
+							LEFT JOIN type_act ON id_act = id_act_typeact
+							LEFT JOIN participant ON id_act = id_participant_act
+							LEFT JOIN organisation ON id_orga = id_act_orga
 						WHERE date_act >= CURRENT_DATE() AND id_participant_membre = $id_membre ");
 	// $bind = "i"; 
 	// $arr= array($_POST["id_orga"]); 
 	// $connexion_stmt->prepare($sql,$bind); 
-	$activite = $connexion->retourne_tableau(); 
+	$activite = $connexion->retourne_tableau(); echo "activite:"; var_dump($activite);
 	if(count($activite) == 0) {
 		echo "Je ne suis inscrit"; if ($_SESSION['sexe']=="1") echo "e";
 		echo " à aucune activité actuellement";

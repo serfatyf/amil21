@@ -50,12 +50,12 @@ else $public = '1';
  	}
 
 
-//on va faire les boutons de selection de type
+//on prend les infos pour faire les boutons de selection de type
 $connexion = new BDD(false);
 $connexion->requete("SELECT * FROM type_act"); 		/*on recupere pour cela la table des types d'activites*/
 $type_act = $connexion->retourne_tableau(); 
 
-//ici on va faire les radio de selection du public visé
+//ici on prend les infos pour faire les radio de selection du public visé
 $connexion->requete("SELECT * FROM public_vise");
 $public_vise = $connexion->retourne_tableau(); 
 
@@ -74,6 +74,7 @@ foreach ($type_act as $value) {		// pr chaque bouton, hors 'tous' puisque fait a
 
 		
 <div id="aside1">
+<input type="radio" id="tout"
 <a href="activites.php?type=1&public=<?php echo $public; ?>"><span <?php if ($type=='1') echo ' class="checked"'; ?>>Toute la famille</span></a>
 <?php foreach ($public_vise as $value) {		// pr chaque bouton, hors 'tous' puisque fait au dessus, si il est cliqué il prend class='checked', synonyme de coloration ?>
 	<a href="activites.php?type=<?php echo $type; ?>&public=<?php echo $value['id_publicvise']; ?>"><span <?php if ($public==$value['id_publicvise']) echo 'class="checked"'; ?>><?php echo $value['public_affich']; ?></span></a>

@@ -38,19 +38,22 @@
 <body>
 <div id="page">
 <ul>	
-	<span><li>  <a href='index.php'> Accueil </a></li></span>
-	<span><li> <a href="activites.php"> Activités</a> </li> </span>
-	<span><li>  <a href='organisations.php'> Les organisations </a> </li></span>
+	<li class="menu">  <a href='index.php'> Accueil </a></li>
+	<li class="menu"> <a href="activites.php"> Activités</a> </li> 
+	<li class="menu">  <a href='organisations.php'> Les organisations </a> </li>
 
 	<?php 		//si je suis connecté, le bouton deco est affiché
-		if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga']))  
-			echo "<span><li>  <a href='deconnexion.php'> Déconnexion</a> </li></span>";
-				
+		if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga'])) {  
+			echo "<li class='menu'>  <a href='mon_compte.php'> Mon compte</a> </li>";
+			echo "<li class='menu'>  <a href='deconnexion.php'> Déconnexion</a> </li>";
+	
+		}	
 				// si je suis deconnecté, il y a le bouton connexion en haut de page
-		else echo "<span><li> <a href='inscription.php'> Inscription / Connexion</a> </li></span>"; 
+		else echo "<li class='menu'> <a href='inscription.php'> Inscription / Connexion</a> </li>"; 
 	?>
 </ul>
-<a id="logo" href="index.php"><img src="index.png" alt="logo, lien vers l'accueil"></a>
+<div class="clear">
+<a id="logo" href="index.php"><img src="index.png" alt="logo, lien vers l'accueil"></a></div>
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" >
 	<input type="submit" name="langue" value="fr"/>

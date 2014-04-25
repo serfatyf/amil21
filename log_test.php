@@ -25,15 +25,15 @@ if (isset($_GET['pseudo'])){
 
 	else { 	
 
- 		$sql = "SELECT login, id_orga, mdp FROM organisation WHERE `login`=?";
+ 		$sql = "SELECT pseudo, id_orga, mdp FROM organisation WHERE `login`=?";
   	$arr = array($_GET['pseudo']);
   	$bind ="s";
   	$connexion_stmt->prepare($sql,$bind); 
   	$result2 = $connexion_stmt->execute($arr);		
   	if (!empty($result2)) {		// si il y a une reponse, c'est que celui qui a cliqué est un membre
     	if ($result2[0]['mdp']==$_GET['mdp']) {	// si le mdp correspond au mdp entré
-    		$_SESSION['pseudo'] = $result2[0]['login'];	// on ouvre les sessions utiles
-    		$_SESSION['id_membre'] = $result2[0]['id_orga'];
+    		$_SESSION['pseudo'] = $result2[0]['pseudo'];	// on ouvre les sessions utiles
+    		$_SESSION['id_orga'] = $result2[0]['id_orga'];
     		echo "succes";
  			}
  			else echo "erreur";

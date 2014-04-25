@@ -10,7 +10,9 @@ del { text-decoration:line-through; }
 table { border-collapse:collapse;border-spacing:0; }
 /* fin du reset */
 
-
+.clear {
+	float: none;
+}
 
 #page {
 	margin:auto;
@@ -22,22 +24,28 @@ table { border-collapse:collapse;border-spacing:0; }
 
 /*/////////////////// HEADER/////////////////////*/
 li {
-	display: inline-block;
+	/*display: inline;
+	width:200px;*/
 	
 }
 
-//span {
-	display: inline-block;
-	width:200px;
+.menu {
+	margin:auto;
+	padding:2%;
+	width: 15%;
+	float: left;
+	border:1px red solid;
+	text-align: center;
 }
+
+
 
 /*li a:first{
 	margin-left: 300px;
 }
 */
 ul{
-/*	float: left;
-*/	margin-left: 50%;
+	margin-left: 10%;
 	padding: 10px;
 
 }
@@ -46,9 +54,9 @@ ul{
 li a{	
 	list-style-type:none;
 	text-decoration: none;
-	border:1px red solid;
+	
 	margin-right: 10px;
-	padding: 10px;
+	//padding: 10px;
 
 }
 

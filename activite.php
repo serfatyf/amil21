@@ -23,9 +23,50 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 	else {		// fiche de l'acivite, meme si on n'y est pas inscrit (ne marche pas avec INNER!)
 		
 		$connexion_stmt = new BDD();								//rajouter age et date de naissance, presentation_membre
+
+		if (isset($_POST['inscrip'])) {
+
+			$sql = "SELECT id_participant_membre, titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
+					LEFT JOIN participant ON id_act = id_participant_act 
+					LEFT JOIN membre ON id_participant_membre = id_membre	
+					WHERE id_act=?";
+	
+			$bind = "i";
+			$arr= array($_GET["id"]);
+			$connexion_stmt->prepare($sql,$bind); 
+			$result = $connexion_stmt->execute($arr);
+
+		 	$inscrit = 0;
+				//verification si deja inscrit 
+		 	for ($i=0; $i<count($result); $i++){
+				if ($_SESSION['id_membre'] == $result["$i"]['id_participant_membre']) {
+		 			//echo "Vous êtes déjà dans la liste des partipants.";
+					$inscrit = 1;
+		 		}
+		 	}	
+		 	
+		 	if ($inscrit == 1){
+		 		echo "Vous êtes déjà dans la liste des partipants.";
+		 	}
+		 	
+		 	else {
+		 			$sql = "INSERT INTO participant (id_participant_act , id_participant_membre) VALUES (?, ?)" ;
+			 		$bind = "ii";	
+			 		$arr = array($_GET['id'], $_SESSION['id_membre']);echo "array";var_dump($arr);
+			 		$arr_prep=	$connexion_stmt->prepare($sql,$bind); 
+					$result = $connexion_stmt->execute($arr); 
+					
+					if ($result==0) 
+						echo "erreur dans l'inscription"; 
+					
+					else echo "bravo, vous êtes inscrit";	
+
+		 	}
+		}
+
 	// une activite, ds la table de gauche, doit etre affichée 
 		// meme si la table de droite est vide, à savoir si un membre n'y est pas inscrit => LEFT JOIN
-		$sql = "SELECT titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
+		$sql = "SELECT id_participant_membre, titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
 					LEFT JOIN participant ON id_act = id_participant_act 
 					LEFT JOIN membre ON id_participant_membre = id_membre	
 				WHERE id_act=?";
@@ -42,7 +83,9 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 			echo "s'inscrire avant le ". $result[0]['date_fin_inscription'];	
 			echo $result[0]['lieu_act']; 
 			echo "<h2> Liste des participants </h2>";
-		
+			?>
+			<div id="liste_inscrits">
+			<?php 
 		// "carte de visite" des inscrits à l'activité
 		//		avec la photo si donnée par le membre, ou une icone sexuée (images dans le repertoire 'photos')	
 			foreach ($result as $value) {
@@ -58,30 +101,22 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 					echo ucfirst($value['prenom'])." ".strtoupper($value['nom']);
 				else echo ucfirst($value['pseudo']);				
 
-
 			}
-
 			
 		?>
-		
+			</div>
 		<form action='<?php echo "activite.php?id=".$_GET['id'];?>' method='POST'>
 			
 			<input type='submit' name='inscrip' value="S'inscrire"/>
 		</form>
 
 		<?php
-		if (isset($_POST['inscrip'])) {
-		 	$sql = "INSERT INTO participant (id_participant_act , id_participant_membre) VALUES (?, ?)" ;
-		 	$bind = "ii";
-		 	$arr = array($_GET['id'], $_SESSION['id_membre']);echo "array";var_dump($arr);
-		 	$arr_prep=	$connexion_stmt->prepare($sql,$bind); 
-			$result = $connexion_stmt->execute($arr); 
-			if ($result==0) 
-				echo "erreur dans l'inscription"; 
-			else echo "bravo, vous êtes inscrit";
-		} 
-		
+ 	
+		 	
+		 	
 		} //?
+		
+		
 
 		else {
 			?>
@@ -101,11 +136,11 @@ else {
 	<h2>Vous devez être connecté(e) pour avoir des informations sur une activité</h2>
 	<p>Pseudo: <input type="text" id="pseudo"/></p>
 	<p>Mot de passe: <input type="text" id="mdp" size="10"/></p>
-	<p><input type="button" id="btn_connect" value="Valider"/></p>
+	<p><input type="submit" id="btn_connect" value="Valider"/></p>
 	
 	<script type="text/javascript">
-	$(document).ready(function() {
-	    $('#btn_connect').click(function() {
+	$(document).ready(function(){
+	    $('#btn_connect').click(function(){
 			$.ajax({
 				"type":"GET",
 				"url":"log_test.php",
@@ -121,6 +156,8 @@ else {
 		});
 	});
 	</script>
+
+	
 	
 	
 		

@@ -70,15 +70,15 @@ if (isset($_GET['pseudo']) && isset($_GET['mdp'])){
   else{
 
   $connexion_stmt = new BDD();
-  $sql = "SELECT login, id_orga, mdp FROM organisation WHERE `login`=? AND `mdp`=?";
+  $sql = "SELECT pseudo, id_orga, mdp FROM organisation WHERE `login`=? AND `mdp`=?";
   $arr = array($_GET['pseudo'], $_GET['mdp']);
   $bind ="ss";
   $connexion_stmt->prepare($sql,$bind); 
   $result = $connexion_stmt->execute($arr);
   
   if (count($result)>0) {
-    $_SESSION['pseudo'] = $result[0]['login'];
-    $_SESSION['id_membre'] = $result[0]['id_orga'];
+    $_SESSION['pseudo'] = $result[0]['pseudo'];
+    $_SESSION['id_orga'] = $result[0]['id_orga'];
     
     echo "succes";
   }
