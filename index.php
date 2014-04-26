@@ -2,8 +2,12 @@
 include "config.php";
 
 include "header.php";
-// echo "sessions:";  var_dump($_SESSION);
-// echo "get:"; var_dump($_GET);
+
+	// facilite l'ajout d'une nouvelle langue
+$public = array('fr' =>'Tout public' ,'en' =>'Every public' );
+$type = array('fr' =>  'Toutes', 'en' => 'All');
+
+	// initialisation des tableaux pour eviter les erreurs
 $textes = array() ;
 $type_act =array();
 $public_vise = array();
@@ -23,25 +27,29 @@ echo "<div id='presentation' >". nl2br($texte['presentation']) . "</div>";
 //echo "Types d'activité";
 
 		// on fait le select "activités" de la barre de recherche
-$connexion->requete("SELECT * FROM type_act"); 		
+$connexion->requete("SELECT id_typeact, type_lg FROM type_act
+						INNER JOIN type_affich ON id_typeact = id_typeaffich_type
+					WHERE langue='". $_SESSION['langue'] ."'"); 		
 	  
 $type_act = $connexion->retourne_tableau(); /*var_dump($type_act)*/;
 echo "<select id='activites' name='type'>\n";
-echo "\t<option value='1'> Toutes </option>\n";
+echo "\t<option value='1'>".$type[$_SESSION['langue']]." </option>\n";
 foreach ($type_act as $value) {
-	echo "\t<option value='". $value['id_typeact'] ."'> " . $value['type_affich'] ." </option>\n";
+	echo "\t<option value='". $value['id_typeact'] ."'> " . $value['type_lg'] ." </option>\n";
 }
 echo "</select>\n";
 
 //echo "Tranches d'age";
 
 		// on fait le select "public visé" de la barre de recherche
-$connexion->requete("SELECT * FROM public_vise");  
-$public_vise = $connexion->retourne_tableau(); //var_dump($public_vise);
+$connexion->requete("SELECT id_publicvise, public_lg FROM public_vise 
+						INNER JOIN public_affich ON id_publicvise= id_publicaffich_public 
+					WHERE langue='". $_SESSION['langue'] ."'");  
+$public_vise = $connexion->retourne_tableau(); 
 echo "<select id='public' name='public'>\n";
-echo "\t<option value='1'> Tout public </option>\n";
+echo "\t<option value='1'>".$public[$_SESSION['langue']] ." </option>\n";
 foreach ($public_vise as $value) {
-	echo "\t<option value='". $value['id_publicvise'] ."'> " . $value['public_affich'] ." </option>\n";
+	echo "\t<option value='". $value['id_publicvise'] ."'> " . $value['public_lg'] ." </option>\n";
 }
 echo "</select>\n";
 

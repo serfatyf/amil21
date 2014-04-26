@@ -36,20 +36,29 @@
 		<link rel="stylesheet" href="/resources/demos/style.css">	
 	</head>
 <body>
+<?php 
+$connexion= new BDD(false);			// le texte de présentation
+$connexion->requete("SELECT * FROM  textes WHERE langue='". $_SESSION['langue'] ."'");
+$textes = $connexion->retourne_tableau();
+foreach ($textes as $value) 
+	$texte[$value['use']] = $value['texte'];
+?>
+
 <div id="page">
+<div id="content">
 <ul>	
-	<li class="menu">  <a href='index.php'> Accueil </a></li>
-	<li class="menu"> <a href="activites.php"> Activités</a> </li> 
-	<li class="menu">  <a href='organisations.php'> Les organisations </a> </li>
+	<li class="menu">  <a href='index.php'> <?php echo $texte['accueil']; ?> </a></li>
+	<li class="menu"> <a href="activites.php"> <?php echo $texte['activites']; ?> </a> </li> 
+	<li class="menu">  <a href='organisations.php'> <?php echo $texte['organisations']; ?> </a> </li>
 
 	<?php 		//si je suis connecté, le bouton deco est affiché
 		if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga'])) {  
-			echo "<li class='menu'>  <a href='mon_compte.php'> Mon compte</a> </li>";
-			echo "<li class='menu'>  <a href='deconnexion.php'> Déconnexion</a> </li>";
+			echo "<li class='menu'>  <a href='mon_compte.php'>". $texte['compte']."  </a> </li>";
+			echo "<li class='menu'>  <a href='deconnexion.php'>".$texte['deconnexion'] ."</a> </li>";
 	
 		}	
 				// si je suis deconnecté, il y a le bouton connexion en haut de page
-		else echo "<li class='menu'> <a href='inscription.php'> Inscription / Connexion</a> </li>"; 
+		else echo "<li class='menu'> <a href='inscription.php'>". $texte['inscription']."</a> </li>"; 
 	?>
 </ul>
 <div class="clear">

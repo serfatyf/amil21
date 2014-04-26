@@ -2,16 +2,16 @@
 include "config.php";
 include "header.php";
 
-echo "GET:";  var_dump($_GET);
-echo "sessions:"; var_dump($_SESSION);
-echo "POST"; var_dump($_POST);
+// echo "GET:";  var_dump($_GET);
+// echo "sessions:"; var_dump($_SESSION);
+// echo "POST"; var_dump($_POST);
 
 	//si on est connecté en tant qu'organisation
 if ( isset($_SESSION['nom_orga']) && isset($_SESSION['id_orga'])) {
 	//&& isset($_SESSION['genre']) && $_SESSION['genre'] == 'orga'
 $id_orga = $_SESSION['id_orga'];
 ?>
-<header id="#"> 
+<header class="haut"> 
 	<h1> Mon compte </h1>
 	<a href="fiche_orga?id= <?php echo "'".$id_orga."'" ?> .php"> Changer la fiche de présentation de l'organisation </a>
 	<a href="#"> Voir les anciennes activités proposées</a>
@@ -30,7 +30,7 @@ $id_orga = $_SESSION['id_orga'];
 	// $bind = "i";
 	// $arr= array($_POST["id_orga"]); 
 	// $connexion_stmt->prepare($sql,$bind); 
-	$activite = $connexion->retourne_tableau(); echo "activite:"; var_dump($activite);
+	$activite = $connexion->retourne_tableau(); 
 	if(count($activite) == 0) {
 		echo "Pas d'activité proposée actuellement";
 	}
@@ -58,15 +58,13 @@ echo "</section>";
 }
 
 if ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre'])) { 
-	//&& $_SESSION['genre'] == "membre" && ) 
 
 $id_membre = $_SESSION['id_membre'];
 ?>
-<header id="#"> 
+<header class="haut"> 
 	<h1> Mon compte </h1>
 	<a href="profil.php"> Changer mon profil </a>
-	<a href="#"> Voir les activités auxquelles j'ai participé</a>
-	<a href="ajout_act.php"> Ajouter une activité </a>
+	<a href="activites_passees.php"> Voir les activités auxquelles j'ai participé</a>
 </header>
 
 <section>
@@ -81,7 +79,7 @@ $id_membre = $_SESSION['id_membre'];
 	// $bind = "i"; 
 	// $arr= array($_POST["id_orga"]); 
 	// $connexion_stmt->prepare($sql,$bind); 
-	$activite = $connexion->retourne_tableau(); echo "activite:"; var_dump($activite);
+	$activite = $connexion->retourne_tableau(); 
 	if(count($activite) == 0) {
 		echo "Je ne suis inscrit"; if ($_SESSION['sexe']=="1") echo "e";
 		echo " à aucune activité actuellement";

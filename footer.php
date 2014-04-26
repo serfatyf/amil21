@@ -1,3 +1,4 @@
+</div>
 	<footer>
 	<div id="nous">
 		<h1> Le site </h1>
