@@ -10,8 +10,20 @@ del { text-decoration:line-through; }
 table { border-collapse:collapse;border-spacing:0; }
 /* fin du reset */
 
-//.clear {
-	float: none;
+.clear {
+	clear: both;
+}
+
+body{
+	background-color: background: #2981ce;
+background: -moz-linear-gradient(top,  #2981ce 4%, #2989d8 42%, #85c6f7 85%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(4%,#2981ce), color-stop(42%,#2989d8), color-stop(85%,#85c6f7));
+background: -webkit-linear-gradient(top,  #2981ce 4%,#2989d8 42%,#85c6f7 85%);
+background: -o-linear-gradient(top,  #2981ce 4%,#2989d8 42%,#85c6f7 85%);
+background: -ms-linear-gradient(top,  #2981ce 4%,#2989d8 42%,#85c6f7 85%);
+background: linear-gradient(to bottom,  #2981ce 4%,#2989d8 42%,#85c6f7 85%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2981ce', endColorstr='#85c6f7',GradientType=0 );
+
 }
 
 #page {
@@ -20,7 +32,9 @@ table { border-collapse:collapse;border-spacing:0; }
 	width:80%;
 	max-width: 1300px;
 	border:1px red solid;
-	background-color: #efeff4;
+	background-color: #FFFFFF;
+	min-height: 1000px;
+	padding-right: 10%;
 }
 
 /*/////////////////// HEADER/////////////////////*/
@@ -47,10 +61,7 @@ li {
 */
 ul{
 	margin-left: 10%;
-	//padding: 10px;
-
-}
-
+}	
 
 li a{	
 	list-style-type:none;
@@ -70,14 +81,33 @@ h1{
 
 img{
 /*	height: 120px;
-*/	/*width:120px;*/width:40px; vertical-align: bottom; /*ne marche pas*/
+*/	/*width:120px;width:40px;*/ vertical-align: bottom; /*ne marche pas*/
 	border:1px green solid;
-	margin-top: -35px;
+	
 }
 
+#bandeau{
+	width:auto;
+	height:110px;
+	background: #efeff4 url(edd.png) no-repeat; 
+	height: 110px;
+	width: 100%;
+	border: solid green 1px;
+	position: relative;
+	
+}
 
+#content {
+	padding-top: 100px;
+}
 
 /*///////////////////// INDEX ///////////////////////////////*/
+
+#present{
+	margin: 70px 15%;
+	text-align: left;
+	border: solid 1px red;
+}
 
 #barre_recherche {
 	border: solid black 1px;
@@ -85,33 +115,39 @@ img{
 	width:800px;
 	//height:200px;
 	padding:20px;
+	background-color: #efeff4;
 }
 
 select{
 	width:200px;
 	//padding-left: 60px ; 
-	margin: 0 50px; 
+	margin: 0 30px 0 10px; 
 	
 }
 
 option{
 	width:100%;
-	background-color: yellow;
+	background-color: #efeff4;
 	border: solid 1px black;
-	padding:10px; //padding-left: 60px;
+	padding:10px;
+	padding-left: 60px;
 }	
 
-#recherche{
+#recherche{		
 	padding: 10px;
 	position: relative;
 	top: 10px;
-	background-color: ;
+	background-color: #ff9500;
+	border: 1px solid #ff9500;
+
 }
 
-/*option:first{
-	padding: 200px;
+#recherche:hover {
+	box-shadow:1px 1px 5px #FFFF00 inset;
+		-moz-box-shadow:1px 1px 5px #FFFF00 inset;
+		-webkit-box-shadow:1px 1px 5px #FFFF00 inset;
 }
-*/
+
 
 /*/////////////////FORMULAIRE////////////////*/
 
@@ -129,7 +165,7 @@ option{
 }
 
 /*//////////////////ACTIVITES////////////////////*/
-#hr1, #hr2{
+/*#hr1, #hr2{
 	display: inline-block;
 	position: relative;
 	bottom: 3px;
@@ -144,4 +180,56 @@ option{
 #hr2 {
 	width: 55%;
 	margin:0 5% 0 1.5%;  
+}*/
+
+#aside1{
+	float:left;
+	margin-top: 100px;
+	line-height: 50px;
+	border: solid 1px black;
+	padding-left: 3%;
+	padding-right: 8%;
+	position:relative;
+
 }
+
+#act{
+	float:left;
+	margin-left: 3%;
+	margin-top: 100px;
+
+}
+
+#btn_activite {
+	width:100%;
+}
+
+#btn_activite a {
+	text-decoration: none;
+	margin: 0 4%;
+	padding:2%;
+	border: 1px solid black;
+	width:100%;
+}
+
+#btn_activite a span {
+	width:100%;
+}
+
+//#age {
+	position: relative;
+	width:100%;
+}
+
+#act p {
+	border: solid 1px black;
+	padding: 1% 80% 4% 1.2%;
+	margin: 10px;
+}
+
+#no_result {
+	margin-top: 200px;
+	padding-left: 35%;
+	line-height: 2em;
+}
+

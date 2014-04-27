@@ -1,7 +1,8 @@
 <?php
 include "config.php";
-require_once('verif_doublons_mb.php');
-
+require_once('verif_doublons.php');
+	$arr = array();
+	// connexion, on verifie ds la table "membre" puis ds la table "organisation"
 if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'])){
 	
 	$connexion_stmt = new BDD();
@@ -15,8 +16,7 @@ if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'
     	if ($result[0]['mdp']==$_POST['mdp']) {
     		$_SESSION['pseudo'] = $result[0]['pseudo'];	// on ouvre les sessions utiles
     		$_SESSION['id_membre'] = $result[0]['id_membre'];
-    	//$_SESSION['genre'] = "membre";
-    		$_SESSION['sexe'] = $result[0]['sexe'];
+       		$_SESSION['sexe'] = $result[0]['sexe'];
     		header('location:mon_compte.php');
     	}
     	else {
@@ -36,7 +36,6 @@ if (isset($_POST['connexion']) && !empty($_POST['login']) && !empty($_POST['mdp'
     			$_SESSION['pseudo'] = $result2[0]['login'];	// on ouvre les sessions utiles
     			$_SESSION['id_orga'] = $result2[0]['id_orga'];
     			$_SESSION['nom_orga'] = $result2[0]['nom_orga'];
-    	//$_SESSION['genre'] = "membre";
     			header('location:mon_compte.php');
     		}
     		else {
@@ -52,7 +51,7 @@ include "header.php";
 echo "GET:";  var_dump($_GET);
 echo "sessions:"; var_dump($_SESSION);
 echo "POST"; var_dump($_POST);
-*/$arr = array();
+*/
 
 //if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga'])){}
 ?>
@@ -60,18 +59,21 @@ echo "POST"; var_dump($_POST);
 
 <div id="inscription" >
 <?php
-if(count($_POST)==0) {
+if(count($_POST)==0) {	//si on n'a pas cliqué, on rend les 2 boutons orga et membre pr le choix du formu d'inscription
+
 ?>
 	<form method="post" action=""> 
 		<input type="submit" name="organisation" value="Organisation" id="btn_orga">
 	</form> 
 	<form method="post" action="">
-		<input type="submit" name="membre" value="Membre" id="btn_orga">
+		<input type="submit" name="membre" value="Membre" id="btn_membre">
 	</form> 
-	<div id='connexion'>
+	<div id='again'>
 <?php
 	if(isset($_GET['again']))
-		echo "<p>Echec de connexion</p>"
+		echo "<p>Echec de connexion</p>";
+
+			// ainsi que le formu de connexion
 ?>
 	<form method="POST" id="connexion" action="" >
 		<label for="login" > Login/ Pseudo: </label> <input type="text" name="login" id="login" /> 
@@ -83,16 +85,16 @@ if(count($_POST)==0) {
 
 </div>
 <?php
-} else { // On a cliqué
- 
-if (/*isset($_POST['btn_membre'])
-	&&*/ isset($_POST['inscrip_membre'])
+} else { // sinon on a cliqué
+ 	
+ 	// soit sur membre
+if ( isset($_POST['inscrip_membre'])
 	&& !empty($_POST['pseudo'])
 	&& !empty($_POST['mail'])
 	&& !empty($_POST['mdp'])
 	&& !empty($_POST['mdp2'])
 	&& $_POST['mdp'] == $_POST['mdp2']) {
-	echo"TEST<br/>";
+	echo"test.<br/>";
 //	$pseudo = $_POST["pseudo"]; echo "pseudo:";var_dump($pseudo);
 //	$sexe = $_POST["sexe"];		
 //	$mail = $_POST["mail"];	echo "mail:";var_dump($mail);	
@@ -108,11 +110,11 @@ if (/*isset($_POST['btn_membre'])
 		$connexion_stmt->prepare($sql,$bind);
 		$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
 
-		if ( $result != 0 ) {
-			$_SESSION['pseudo'] = $result[0]['pseudo'];
-			$_SESSION['id_membre'] = $connexion_stmt->get_last_id();
-			$_SESSION['sexe'] = $result[0]["membre"];
-		}
+//ERREUR		//if ( $result != 0 ) {
+			// $_SESSION['pseudo'] = $result[0]['pseudo'];
+			// $_SESSION['id_membre'] = $connexion_stmt->get_last_id();
+			// $_SESSION['sexe'] = $result[0]["membre"];
+		//}
 	} else
 		$_POST['membre'] = "ok";
 }
@@ -154,17 +156,17 @@ if ( isset($_POST['inscrip_orga'])
 
 	if(!doublon_orga()) {
 
-		$sql = "INSERT INTO organisation (nom_orga, mail_secretaire, mdp, pseudo) VALUES (?,?,?,?)";
+		$sql = "INSERT INTO organisation (nom_orga, mail_secretaire, mdp, login) VALUES (?,?,?,?)";
 		$bind ="ssss";
 		$arr = array($_POST['nom_orga'], $_POST['mail'], $_POST['mdp'], $_POST['pseudo']);
 		$connexion_stmt->prepare($sql,$bind);
-		$result = $connexion_stmt->execute($arr); //echo"result:";var_dump($result);
+		$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
 	
-		if ($result != 0) {
-			$_SESSION['nom_orga'] = $result[0]['nom_orga'];
-			$_SESSION['id_orga'] = $connexion_stmt->get_last_id();
-    		$_SESSION['pseudo'] = $result[0]['pseudo'];
-		}
+//ERREUR		if ($result != 0) {
+		//	$_SESSION['nom_orga'] = $result[0]['nom_orga'];
+		//	$_SESSION['id_orga'] = $connexion_stmt->get_last_id();
+    	//	$_SESSION['pseudo'] = $result[0]['pseudo'];
+		//}
 	} else
 		$_POST['organisation'] = "ok";
 }

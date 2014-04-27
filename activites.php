@@ -24,12 +24,59 @@ if (isset($_GET['public']))		// idem pour le public
 	$public =	$_GET['public'];
 else $public = '1';
 
+	//on prend les infos pour faire les boutons de selection de type d'activite
+$connexion = new BDD(false);
+$connexion->requete("SELECT id_typeact, type_lg FROM type_act
+						INNER JOIN type_affich ON id_typeact = id_typeaffich_type
+					WHERE langue='". $_SESSION['langue'] ."'"); 		/*on recupere pour cela la table des types d'activites*/
+$type_act = $connexion->retourne_tableau(); 
 
+	//ici on prend les infos pour faire les "li" de selection du public visé
+$connexion->requete("SELECT id_publicvise, public_lg FROM public_vise 
+						INNER JOIN public_affich ON id_publicvise= id_publicaffich_public 
+					WHERE langue='". $_SESSION['langue'] ."'");
+$public_vise = $connexion->retourne_tableau(); 
+
+?>
+<div id="btn_activite">		<!-- boutons "activités" -->
+<a href="activites.php?type=1&public= <?php echo $public; ?> "><span <?php if ($type=='1') echo 'class="checked"'; ?>> <?php echo $types[$_SESSION['langue']]; ?> </span></a>
+<?php 
+foreach ($type_act as $value) {		// pr chaque bouton, hors 'tous' puisque fait au dessus, si il est cliqué il prend class='checked', synonyme de coloration 
+?>
+	<a href="activites.php?type=<?php echo $value['id_typeact']; ?>&public=<?php echo $public; ?>"><span <?php if ($type==$value['id_typeact']) echo 'class="checked"'; ?>><?php echo $value['type_lg']; ?></span></a>
+<?php
+
+}
+ ?>
+</div>
+
+		
+<div id="aside1">	<!-- li "public visé" -->
+	<div id="age">Ages</div>
+	<ul>
+		<li>
+			<a href="activites.php?type=<?php echo $type;?>&public=1"> <?php echo $types[$_SESSION['langue']]; ?> </a> 
+		</li>
+		<!-- <label for="tout"> <input type="radio" id="tout" <?php if ($public=="1") echo 'checked'; ?>/>
+			<a href="activites.php?type=<?php echo $type;?>&public=1"> <?php echo $types[$_SESSION['langue']]; ?></label> </a> -->
+<?php 
+foreach ($public_vise as $value) {		// pr chaque radio, hors 'tous' puisque fait au dessus, si il est cliqué il est checké
+?>
+		<!-- <label for="<?php echo $value['id_publicvise'] ?>" > <input type="radio" id="<?php echo $value['id_publicvise'];?>" <?php if ($public==$value['id_publicvise']) echo "checked"; ?> /> -->
+		<li>
+			<a href="activites.php?type=<?php echo $type;?>&public=<?php echo $value['id_publicvise']; ?>"><span <?php if ($public==$value['id_publicvise']) echo 'class="checked"'; ?>>  <?php echo $value['public_lg']; ?></span></label></a>
+		</li>	
+<?php
+}
+?>
+	</ul>
+</div>
+<?php 
 // requete renvoyant le choix d'activite fait par l'utilisateur
 	$connexion_stmt = new BDD();
 
 	$bind = "";
-	$sql = "SELECT id_act, type, titre, date_act , id_act_typeact, nom_orga, public FROM  act 
+	$sql = "SELECT id_act, type, titre, date_act , id_act_typeact, id_typeact, nom_orga, public FROM  act 
 					INNER JOIN public_vise ON id_publicvise=id_act_publicvise
 	 				INNER JOIN type_act  ON id_typeact = id_act_typeact
 	 				INNER JOIN organisation ON id_act_orga = id_orga  
@@ -55,11 +102,12 @@ else $public = '1';
 	$result = $connexion_stmt->execute($arr); 
 
 	if ($result == []){
-		echo "Il n'y a actuellement pas d'activités de prévues avec ces conditions de recherche.<br/>";
-		echo "Essayez avec une autre recherche, çà vous donnera peut-être des idées";
+		echo "<div id='no_result'> Il n'y a actuellement pas d'activités de prévues avec ces conditions de recherche.<br/>";
+		echo "Essayez avec une autre recherche, çà vous donnera peut-être des idées</di";
 	}
 	else {
 		$date_actuelle = "";
+		echo "<div id='act'>";
 		foreach ($result as $value) { 		
 		
 				// création de la date
@@ -68,15 +116,15 @@ else $public = '1';
 
 				//affichage des activites, par date
 			if ($value['date_act'] != $date_actuelle) {
-				echo "<hr id='hr1'>";
-				echo $date = $jours[date('w', $time)]." ".date('j', $time)." ".$mois[date('n', $time)]." ".date('Y', $time);
 				
-				echo "<hr id='hr2'>";
+				echo $date = $jours[date('w', $time)]." ".date('j', $time)." ".$mois[date('n', $time)]." ".date('Y', $time)."\n";
+				
+				
 				$date_actuelle = $value['date_act'];
 			}
-			echo "<a href='activite.php?id=".$value['id_act']."' >";	
-			echo $value['titre']."</a> ";
-		}
+			echo "\t<p><a href='activite.php?id=".$value['id_act']."' id=".$value['id_typeact']." >".$value['titre']."</a></p> \n";;	
+			
+		}echo "</div>";
 	}
 
 			//echo "<p>organisé par: " . $value['nom_orga'] ."</p>";
@@ -102,50 +150,4 @@ else $public = '1';
  		// }
  	//}
 
-	//on prend les infos pour faire les boutons de selection de type
-$connexion = new BDD(false);
-$connexion->requete("SELECT id_typeact, type_lg FROM type_act
-						INNER JOIN type_affich ON id_typeact = id_typeaffich_type
-					WHERE langue='". $_SESSION['langue'] ."'"); 		/*on recupere pour cela la table des types d'activites*/
-$type_act = $connexion->retourne_tableau(); 
-
-	//ici on prend les infos pour faire les "li" de selection du public visé
-$connexion->requete("SELECT id_publicvise, public_lg FROM public_vise 
-						INNER JOIN public_affich ON id_publicvise= id_publicaffich_public 
-					WHERE langue='". $_SESSION['langue'] ."'");
-$public_vise = $connexion->retourne_tableau(); 
-
-?>
-<div>		<!-- boutons "activités" -->
-<a href="activites.php?type=1&public= <?php echo $public; ?> "><span <?php if ($type=='1') echo 'class="checked"'; ?>> <?php echo $types[$_SESSION['langue']]; ?> </span></a>
-<?php 
-foreach ($type_act as $value) {		// pr chaque bouton, hors 'tous' puisque fait au dessus, si il est cliqué il prend class='checked', synonyme de coloration 
-?>
-	<a href="activites.php?type=<?php echo $value['id_typeact']; ?>&public=<?php echo $public; ?>"><span <?php if ($type==$value['id_typeact']) echo 'class="checked"'; ?>><?php echo $value['type_lg']; ?></span></a>
-<?php
-
-}
- ?>
-</div>
-
-		
-<div id="aside1">	<!-- radios "public visé" -->
-	<ul>
-		<li>
-			<a href="activites.php?type=<?php echo $type;?>&public=1"> <?php echo $types[$_SESSION['langue']]; ?> </a> 
-		</li>
-		<!-- <label for="tout"> <input type="radio" id="tout" <?php if ($public=="1") echo 'checked'; ?>/>
-			<a href="activites.php?type=<?php echo $type;?>&public=1"> <?php echo $types[$_SESSION['langue']]; ?></label> </a> -->
-<?php 
-foreach ($public_vise as $value) {		// pr chaque radio, hors 'tous' puisque fait au dessus, si il est cliqué il est checké
-?>
-		<!-- <label for="<?php echo $value['id_publicvise'] ?>" > <input type="radio" id="<?php echo $value['id_publicvise'];?>" <?php if ($public==$value['id_publicvise']) echo "checked"; ?> /> -->
-		<li>
-			<a href="activites.php?type=<?php echo $type;?>&public=<?php echo $value['id_publicvise']; ?>"><span <?php if ($public==$value['id_publicvise']) echo 'class="checked"'; ?>>  <?php echo $value['public_lg']; ?></span></label></a>
-		</li>	
-<?php
-}
-?>
-	</ul>
-</div>
 

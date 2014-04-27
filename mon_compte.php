@@ -8,7 +8,6 @@ include "header.php";
 
 	//si on est connecté en tant qu'organisation
 if ( isset($_SESSION['nom_orga']) && isset($_SESSION['id_orga'])) {
-	//&& isset($_SESSION['genre']) && $_SESSION['genre'] == 'orga'
 $id_orga = $_SESSION['id_orga'];
 ?>
 <header class="haut"> 
@@ -56,19 +55,21 @@ echo "</section>";
 
 	
 }
-
+	// si on est connecté en tant que membre
 if ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre'])) { 
 
 $id_membre = $_SESSION['id_membre'];
 ?>
 <header class="haut"> 
 	<h1> Mon compte </h1>
-	<a href="profil.php"> Changer mon profil </a>
+	<a href="#"> Changer mon profil </a>
 	<a href="activites_passees.php"> Voir les activités auxquelles j'ai participé</a>
 </header>
 
 <section>
-	<h1> Liste des activités proposées actuellement</h1>
+
+<!-- NON -->
+	<!-- <h1> Liste des activités proposées actuellement</h1> -->
 <?php 
 	$connexion = new BDD(false);
 	$connexion->requete( "SELECT id_act, titre, presentation_act, date_fin_inscription, date_act, heure_act, id_act_typeact, nom_orga FROM act
@@ -79,7 +80,7 @@ $id_membre = $_SESSION['id_membre'];
 	// $bind = "i"; 
 	// $arr= array($_POST["id_orga"]); 
 	// $connexion_stmt->prepare($sql,$bind); 
-	$activite = $connexion->retourne_tableau(); 
+	$activite = $connexion->retourne_tableau(); var_dump($activite);
 	if(count($activite) == 0) {
 		echo "Je ne suis inscrit"; if ($_SESSION['sexe']=="1") echo "e";
 		echo " à aucune activité actuellement";
@@ -90,6 +91,7 @@ $id_membre = $_SESSION['id_membre'];
 	<h1> Liste des activités auxquelles je suis inscrit <?php if ($_SESSION['sexe']=="1") echo "e"; ?> </h1>
 	<ul>
 		<?php 
+						
 			foreach ($activite as $value) { 
 				echo "<li>";
 				echo $value['titre'];

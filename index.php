@@ -12,9 +12,12 @@ $textes = array() ;
 $type_act =array();
 $public_vise = array();
 $texte = array();
-
-
-$connexion= new BDD(false);			// le texte de présentation
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+		// le texte de présentation
+echo "<div id='present'>";
+$connexion= new BDD(false);			
 $connexion->requete("SELECT * FROM  textes WHERE langue='". $_SESSION['langue'] ."'");
 $textes = $connexion->retourne_tableau();
 foreach ($textes as $value) 
@@ -22,6 +25,7 @@ foreach ($textes as $value)
 echo "<div id='presentation' >". nl2br($texte['presentation']) . "</div>";
 	
 ?>
+</div>
  <form method="GET" id="barre_recherche" action="<?php echo "activites.php"; ?>" /> 
 <?php
 //echo "Types d'activité";
@@ -32,6 +36,7 @@ $connexion->requete("SELECT id_typeact, type_lg FROM type_act
 					WHERE langue='". $_SESSION['langue'] ."'"); 		
 	  
 $type_act = $connexion->retourne_tableau(); /*var_dump($type_act)*/;
+echo $texte['type_act'];
 echo "<select id='activites' name='type'>\n";
 echo "\t<option value='1'>".$type[$_SESSION['langue']]." </option>\n";
 foreach ($type_act as $value) {
@@ -46,8 +51,9 @@ $connexion->requete("SELECT id_publicvise, public_lg FROM public_vise
 						INNER JOIN public_affich ON id_publicvise= id_publicaffich_public 
 					WHERE langue='". $_SESSION['langue'] ."'");  
 $public_vise = $connexion->retourne_tableau(); 
+echo $texte['public'];
 echo "<select id='public' name='public'>\n";
-echo "\t<option value='1'>".$public[$_SESSION['langue']] ." </option>\n";
+echo "\t<option value='1'><span>".$public[$_SESSION['langue']] ."</span> </option>\n";
 foreach ($public_vise as $value) {
 	echo "\t<option value='". $value['id_publicvise'] ."'> " . $value['public_lg'] ." </option>\n";
 }

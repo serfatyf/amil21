@@ -45,13 +45,16 @@ foreach ($textes as $value)
 ?>
 
 <div id="page">
-<div id="content">
+<!-- <a id="logo" href="index.php"><img src="edd.png" alt="logo, lien vers l'accueil"></a> -->
+<div id="bandeau">
+
 <ul>	
 	<li class="menu">  <a href='index.php'> <?php echo $texte['accueil']; ?> </a></li>
-	<li class="menu"> <a href="activites.php"> <?php echo $texte['activites']; ?> </a> </li> 
+	<li class="menu"> <a href="activites.php"> <?php echo $texte['top_activite']; ?> </a> </li> 
 	<li class="menu">  <a href='organisations.php'> <?php echo $texte['organisations']; ?> </a> </li>
 
-	<?php 		//si je suis connecté, le bouton deco est affiché
+
+	<?php 		//si je suis connecté, les boutons "deco" et "mon compte" sont affichés
 		if (isset($_SESSION['id_membre']) || isset($_SESSION['id_orga'])) {  
 			echo "<li class='menu'>  <a href='mon_compte.php'>". $texte['compte']."  </a> </li>";
 			echo "<li class='menu'>  <a href='deconnexion.php'>".$texte['deconnexion'] ."</a> </li>";
@@ -61,8 +64,10 @@ foreach ($textes as $value)
 		else echo "<li class='menu'> <a href='inscription.php'>". $texte['inscription']."</a> </li>"; 
 	?>
 </ul>
-<div class="clear">
-<a id="logo" href="index.php"><img src="index.png" alt="logo, lien vers l'accueil"></a></div>
+</div>
+
+<div id="content">
+
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" >
 	<input type="submit" name="langue" value="fr"/>

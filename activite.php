@@ -10,7 +10,7 @@ include "header.php";
 echo "POST:";  var_dump($_POST);
 echo "sessions:"; var_dump($_SESSION);
 echo "GET:";  var_dump($_GET);
-
+	// si on est connecté
 if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SESSION['sexe']) )) {
 	
 	if(!isset($_GET['id'])) {	
@@ -27,8 +27,8 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 		if (isset($_POST['inscrip'])) {
 
 			$sql = "SELECT id_participant_membre, titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
-					LEFT JOIN participant ON id_act = id_participant_act 
-					LEFT JOIN membre ON id_participant_membre = id_membre	
+						LEFT JOIN participant ON id_act = id_participant_act 
+						LEFT JOIN membre ON id_participant_membre = id_membre	
 					WHERE id_act=?";
 	
 			$bind = "i";
@@ -40,8 +40,7 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 				//verification si deja inscrit 
 		 	for ($i=0; $i<count($result); $i++){
 				if ($_SESSION['id_membre'] == $result["$i"]['id_participant_membre']) {
-		 			//echo "Vous êtes déjà dans la liste des partipants.";
-					$inscrit = 1;
+		 			$inscrit = 1;
 		 		}
 		 	}	
 		 	
@@ -63,18 +62,18 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 
 		 	}
 		}
-
+			//fiche de l'activité, avec en bas la liste (cartes de visite?) des participants
 	// une activite, ds la table de gauche, doit etre affichée 
 		// meme si la table de droite est vide, à savoir si un membre n'y est pas inscrit => LEFT JOIN
-		$sql = "SELECT id_participant_membre, titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, photo, pseudo FROM act
+		$sql = "SELECT id_participant_membre, titre, presentation_act, date_fin_inscription, ville_act, departement_act, lieu_act, lieu_rdv, date_act, heure_act, duree, photo_act, date_parution, prenom, nom, sexe, photo, pseudo FROM act
 					LEFT JOIN participant ON id_act = id_participant_act 
 					LEFT JOIN membre ON id_participant_membre = id_membre	
 				WHERE id_act=?";
 	
 		$bind = "i";
-		$arr= array($_GET["id"]); echo "arr:"; var_dump($arr);
+		$arr= array($_GET["id"]); 
 		$connexion_stmt->prepare($sql,$bind); 
-		$result = $connexion_stmt->execute($arr); echo "result:"; var_dump($result);
+		$result = $connexion_stmt->execute($arr); 
 		if(count($result) > 0) {		// utile? si $_GET['id'] est setté, il y a forcement une act
 					
 			echo "<h1>".$result[0]['titre']."</h1>" ; 
@@ -93,7 +92,7 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 					echo "<img src='/photos/".$value['photo'] . " alt='photo de ".$identite. "' />";
 				}
 				// else {
-				// 		if ($_SESSION['sexe'] == 0)
+				// 		if ($value['sexe'] == 0)
 				// 			echo "<img src='/photos/ico_homme.png' alt='icone d'un homme' />";
 				// 		else echo "<img src='/photos/ico_femme.png' alt='icone d'une femme' />";
 				// }
@@ -126,11 +125,8 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 	}
 } 
 
-// else if ( isset($_SESSION['genre']) && $_SESSION['genre'] == "orga" ) {
-// 	if(!isset($_GET['id_act'])) {
-// }
 
-else {
+else {	// si on n'est pas connecté, on arrive sur un formulaire d'inscription
 	?> 
 
 	<h2>Vous devez être connecté(e) pour avoir des informations sur une activité</h2>
