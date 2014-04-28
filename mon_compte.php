@@ -22,9 +22,10 @@ $id_orga = $_SESSION['id_orga'];
 <section>
 <?php 
 	$connexion = new BDD(false);
-	$connexion->requete( "SELECT id_act, titre, presentation_orga, date_fin_inscription, date_act, heure_act, id_act_typeact FROM act
+	$connexion->requete( "SELECT DISTINCT id_act, titre, presentation_orga, date_fin_inscription, date_act, heure_act, id_act_typeact FROM act
 							INNER JOIN type_act ON id_act = id_act_typeact
 							INNER JOIN participant ON id_act = id_participant_act
+							INNER JOIN organisation ON id_act_orga = id_orga
 						WHERE date_act >= CURRENT_DATE() AND id_act_orga = $id_orga");
 	// $bind = "i";
 	// $arr= array($_POST["id_orga"]); 
@@ -72,7 +73,7 @@ $id_membre = $_SESSION['id_membre'];
 	<!-- <h1> Liste des activités proposées actuellement</h1> -->
 <?php 
 	$connexion = new BDD(false);
-	$connexion->requete( "SELECT id_act, titre, presentation_act, date_fin_inscription, date_act, heure_act, id_act_typeact, nom_orga FROM act
+	$connexion->requete( "SELECT DISTINCT id_act, titre, presentation_act, date_fin_inscription, date_act, heure_act, id_act_typeact, nom_orga FROM act
 							LEFT JOIN type_act ON id_act = id_act_typeact
 							LEFT JOIN participant ON id_act = id_participant_act
 							LEFT JOIN organisation ON id_orga = id_act_orga

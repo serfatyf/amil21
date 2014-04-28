@@ -2,61 +2,69 @@
 include "config.php";
 
 include "header.php";
-
+//$langue = $_SESSION['langue'];
 if ( isset($_SESSION['nom_orga']) && isset($_SESSION['id_orga'])) {
 //	&& isset($_SESSION['genre']) && $_SESSION['genre'] == 'orga'
 
-if (isset($_POST['ajout'])) {
-	$connexion_stmt = new BDD();
-	$sql = "INSERT INTO act (titre, id_act_publicvise, id_act_typeact, presentation_act, date_act, heure_act, duree, lieu_act, ville_act, departement_act, lieu_rdv, heure_rdv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	$bind ="ssssssssssssi";
+	if (isset($_POST['ajout'])) {
+		var_dump($_POST).
+		$connexion_stmt = new BDD();
+		$sql = "INSERT INTO act (titre, id_act_publicvise, id_act_typeact, presentation_act, date_act, heure_act, duree, lieu_act, ville_act, departement_act, lieu_rdv, heure_rdv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$bind ="siissssssssss";
 	//$result_type = array($_POST['type'] - $nb_public);
-	$arr = array($_POST['titre'], $_POST['public'], $_POST['type'], $_POST['area'], $_POST['date'], $_POST['heure_act'], $_POST['duree'], $_POST['adresse_act'], $_POST['ville'], $_POST['departement'], $_POST['adresse_rdv'], $_POST['heure_rdv'], $_SESSION['id_orga']);
-	$connexion_stmt->prepare($sql,$bind);
-	$result = $connexion_stmt->execute($arr); 
-	if ($result == 0){
-		echo "Désolé mais une erreur s'est produite dans la création de votre fiche d'activité";
-		echo "<a href='mon_compte.php'> Retour à mon compte </a>";
-	} 
-	else { 
-		echo "bravo, une activité de plus à votre actif.";	
-		echo "<a href='mon_compte.php'> Retour à mon compte </a>";
+		$arr = array($_POST['titre'], $_POST['public'], $_POST['type'], $_POST['area'], $_POST['date'], $_POST['heure_act'], $_POST['duree'], $_POST['adresse_act'], $_POST['ville'], $_POST['departement'], $_POST['adresse_rdv'], $_POST['heure_rdv'], $_SESSION['id_orga']);
+		$connexion_stmt->prepare($sql,$bind);
+		$result = $connexion_stmt->execute($arr); 
+		if ($result == 0){
+			echo "Désolé mais une erreur s'est produite dans la création de votre fiche d'activité";
+			echo "<a href='mon_compte.php'> Retour à mon compte </a>";
+		} 
+		else { 
+			echo "bravo, une activité de plus à votre actif.";	
+			echo "<a href='mon_compte.php'> Retour à mon compte </a>";
+		}
 	}
-}
-else {
-?>	
+	else {
+	?>	
 
 
-<h1> Nouvelle activité	</h1>
+	<h1> Nouvelle activité	</h1>
 
-<form method="post" action="mon_compte.php" enctype="multipart/form-data" >		 
+	<form method="post" action="" enctype="multipart/form-data" >		 
 	<div>
-		Titre: <input type="text" id="titre" name="titre" size="100" placeholder="paraîtra à tous les visiteurs"> 
+	Titre: <input type="text" id="titre" name="titre" size="100" placeholder="paraîtra à tous les visiteurs"> 
 		<div id="age">
 			Public visé:
-			<label for="tout"> Tout public <input type="radio" id="tout" name="public" /> </label>
-		<?php 
-			$connexion = new BDD(false);
-			$connexion->requete("SELECT * FROM public_vise");  //on affiche la liste des publics avec des boutons radio
-			$public_vise = $connexion->retourne_tableau();
-			$i = 1;
-			foreach ($public_vise as $value){
-	 			echo "<label for='". $value['id_publicvise'] ."'>" . $value['public_affich'] ."</label><input type='radio' id='". $value['id_publicvise'] ."' value='". $value['id_publicvise'] ."' name='public' /> "; 
-	 			$i++;
-			}
+			<label for="1"> Tout public <input type="radio" id="1" name="public" /> </label>
+	<?php 
+		$connexion = new BDD(false);
+		$connexion->requete("SELECT * FROM public_vise 
+			INNER JOIN public_affich ON id_publicvise = id_publicaffich_public
+			WHERE langue = 'fr'");  //on affiche la liste des publics avec des boutons radio
+		$public_vise = $connexion->retourne_tableau(); 
+		$i = 1;
+		foreach ($public_vise as $value){
+			echo "\t<label for='". $value['id_publicvise'] ."'>" . $value['public_lg'] ."</label><input type='radio' id='". $value['id_publicvise'] ."' value='". $value['id_publicvise'] ."' name='public' /> \n"; 
+			$i++;
+		}
 			$nb_public = $i;
+			$i = $nb_public + 1;
 		?>	
 		</div>
 		<div id="type">
 			Type d'activité:
-			<label for="toutes"> Toutes <input type="radio" id="toutes" name="type" /> </label>
+			<label for=" <?php echo $i ?> "> Toutes <input type="radio" id="<?php echo $i ?>  /> </label>
 		<?php 
-			$connexion->requete("SELECT * FROM type_act");  //on affiche la liste des familles d'activites avec des radio
+			$connexion->requete("SELECT * FROM type_act
+				INNER JOIN type_affich ON id_typeact = id_typeaffich_type
+				WHERE langue = 'fr'");  //on affiche la liste des familles d'activites avec des radio
 			$type_act = $connexion->retourne_tableau();
-			$i += 1;
+			
+			//  pour ne pas avoir les memes id pr les 2 listes
+			
 			foreach ($type_act as $value){
 				$i++;
-	 			echo "<label for='". $i/*+$value['id_typeact']*/ ."'>" . $value['type_affich'] ."</label><input type='radio' id='". $i/*+$value['id_typeact']*/ ."' value='". $value['id_typeact'] ."' name='type' /> "; 
+	 			echo "\t<label for='". $i/*+$value['id_typeact']*/ ."'>" . $value['type_lg'] ."</label><input type='radio' id='". $i/*+$value['id_typeact']*/ ."' value='". $value['id_typeact'] ."' name='type' /> \n"; 
 			}
 		?>
 		</div>
@@ -83,4 +91,4 @@ else {
 			
 <?php 
 
-}
+}}
