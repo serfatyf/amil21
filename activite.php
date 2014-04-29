@@ -7,9 +7,9 @@ include "header.php";
 // 	unset($_SESSION['id_membre']);
 // 	unset($_SESSION['type']);
 // }
-echo "POST:";  var_dump($_POST);
-echo "sessions:"; var_dump($_SESSION);
-echo "GET:";  var_dump($_GET);
+// echo "POST:";  var_dump($_POST);
+// echo "sessions:"; var_dump($_SESSION);
+// echo "GET:";  var_dump($_GET);
 	// si on est connecté
 if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SESSION['sexe']) )) {
 	
@@ -51,7 +51,7 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 		 	else {
 		 			$sql = "INSERT INTO participant (id_participant_act , id_participant_membre) VALUES (?, ?)" ;
 			 		$bind = "ii";	
-			 		$arr = array($_GET['id'], $_SESSION['id_membre']);echo "array";var_dump($arr);
+			 		$arr = array($_GET['id'], $_SESSION['id_membre']);//echo "array";var_dump($arr);
 			 		$arr_prep=	$connexion_stmt->prepare($sql,$bind); 
 					$result = $connexion_stmt->execute($arr); 
 					
@@ -78,9 +78,9 @@ if ( ( isset($_SESSION['pseudo']) && isset($_SESSION['id_membre']) && isset($_SE
 					
 			echo "<h1>".$result[0]['titre']."</h1>" ; 
 			echo "<h2>".$result[0]['presentation_act']."</h2>" ; 
-			echo $result[0]['date_act'];
-			echo "s'inscrire avant le ". $result[0]['date_fin_inscription'];	
-			echo $result[0]['lieu_act']; 
+			echo "le ".$result[0]['date_act'];
+			echo "à ". $result[0]['heure_act'];	
+			echo "Adresse: ".$result[0]['lieu_act']."<br/>"; 
 			echo "<h2> Liste des participants </h2>";
 			?>
 			<div id="liste_inscrits">

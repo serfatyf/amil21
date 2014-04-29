@@ -110,11 +110,11 @@ if ( isset($_POST['inscrip_membre'])
 		$connexion_stmt->prepare($sql,$bind);
 		$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
 
-//ERREUR		//if ( $result != 0 ) {
-			// $_SESSION['pseudo'] = $result[0]['pseudo'];
-			// $_SESSION['id_membre'] = $connexion_stmt->get_last_id();
-			// $_SESSION['sexe'] = $result[0]["membre"];
-		//}
+		if ( $result != 0 ) {
+			$_SESSION['pseudo'] = $_POST['pseudo'];
+			$_SESSION['id_membre'] = $connexion_stmt->get_last_id();
+			$_SESSION['sexe'] = $_POST["sexe"];
+		}
 	} else
 		$_POST['membre'] = "ok";
 }
@@ -162,11 +162,11 @@ if ( isset($_POST['inscrip_orga'])
 		$connexion_stmt->prepare($sql,$bind);
 		$result = $connexion_stmt->execute($arr); echo"result:";var_dump($result);
 	
-//ERREUR		if ($result != 0) {
-		//	$_SESSION['nom_orga'] = $result[0]['nom_orga'];
-		//	$_SESSION['id_orga'] = $connexion_stmt->get_last_id();
-    	//	$_SESSION['pseudo'] = $result[0]['pseudo'];
-		//}
+		if ($result != 0) {
+			$_SESSION['nom_orga'] = $_POST['nom_orga'];
+			$_SESSION['id_orga'] = $connexion_stmt->get_last_id();
+    		$_SESSION['pseudo'] = $_POST['pseudo'];
+		}
 	} else
 		$_POST['organisation'] = "ok";
 }

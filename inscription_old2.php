@@ -185,6 +185,7 @@ else {
     $(document).ready(function() {
     		// si le JS est actif, on cache le formulaire des organisations 
     	$("#formu_orga").load().hide();
+        //$("#formu_orga").load().focus();
 		    // choix du formulaire inscription membre ou organisation
         $("#btn_membre").click(function(){
             $("#formu_orga").hide();
@@ -214,9 +215,9 @@ else {
                 } 
                 else if (name=="pseudo") {
                     $.ajax({
-                        "type":"POST",
-                        "url":"verif_doublons_mb_0.php",
-                        "data":"pseudo="+$("#pseudo").val(),
+                        type:"POST",
+                        url:"verif_doublons_mb_0.php",
+                        data:"pseudo="+$("#pseudo").val(),
                         success:function(data){
                             if (data=="doublon ") {
                                 erreur.show().text("ce pseudo existe deja");
@@ -227,7 +228,7 @@ else {
                             }
                         }
                     });
-                }
+                } 
     // mail non vide, ayant une formulation regexée de mail, non redondante avec table
                 else if (name=="mail" && $("#mail").val() == ""){
                     erreur.show().text("veuillez entrer un mail");
@@ -239,9 +240,9 @@ else {
                 }
                 else if (name=="mail") {
                     $.ajax({
-                        "type":"POST",
-                        "url":"verif_doublons_mb.php",
-                        "data":"sexe="+$("#mail").val(),
+                        type:"POST",
+                        url:"verif_doublons_mb.php",
+                        data:"sexe="+$("#mail").val(),
                         success:function(data){
                             if (data=="doublon ") {
                                 erreur.show().text("ce mail existe deja");
@@ -262,8 +263,8 @@ else {
                     erreur.show().text("ERREUR");
                     valid = false;   
                 }
-            return valid;    // pr que ca bloque
-            }); 
+             return valid;    // pr que ca bloque
+             }); 
 
     });                 			
 </script>

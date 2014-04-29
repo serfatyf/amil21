@@ -69,8 +69,7 @@ $id_membre = $_SESSION['id_membre'];
 
 <section>
 
-<!-- NON -->
-	<!-- <h1> Liste des activités proposées actuellement</h1> -->
+
 <?php 
 	$connexion = new BDD(false);
 	$connexion->requete( "SELECT DISTINCT id_act, titre, presentation_act, date_fin_inscription, date_act, heure_act, id_act_typeact, nom_orga FROM act
@@ -81,7 +80,7 @@ $id_membre = $_SESSION['id_membre'];
 	// $bind = "i"; 
 	// $arr= array($_POST["id_orga"]); 
 	// $connexion_stmt->prepare($sql,$bind); 
-	$activite = $connexion->retourne_tableau(); var_dump($activite);
+	$activite = $connexion->retourne_tableau(); 
 	if(count($activite) == 0) {
 		echo "Je ne suis inscrit"; if ($_SESSION['sexe']=="1") echo "e";
 		echo " à aucune activité actuellement";
@@ -101,7 +100,10 @@ $id_membre = $_SESSION['id_membre'];
 		 	}
 
 		?>
+	
 	</ul>
 
 <?php 
 }}
+
+include "footer.php";

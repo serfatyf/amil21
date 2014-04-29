@@ -33,8 +33,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2981ce', end
 	max-width: 1300px;
 	border:1px red solid;
 	background-color: #FFFFFF;
-	min-height: 1000px;
-	//padding-right: 10%;
+	
 }
 
 /*/////////////////// HEADER/////////////////////*/
@@ -73,19 +72,12 @@ li a{
 
 }
 
-h1{
-	margin-top: -60px;
-	margin-left: 140px;
-	padding-bottom: 40px;
-	border-bottom: 1px black solid;
+#bandeau + form {
+	text-align: right;
+	margin-bottom: 100px;
 }
 
-img{
-/*	height: 120px;
-*/	/*width:120px;width:40px;*/ vertical-align: bottom; /*ne marche pas*/
-	border:1px green solid;
-	
-}
+
 
 #bandeau{
 	width:auto;
@@ -185,7 +177,7 @@ option{
 
 #aside1{
 	float:left;
-	margin-top: 100px;
+	margin-top: 220px;
 	line-height: 50px;
 	border: solid 1px black;
 	padding-left: 3%;
@@ -222,7 +214,7 @@ option{
 	width:100%;
 }
 
-#act p {
+#act p:not(.date) {
 	border: solid 1px black;
 	padding: 1% 74% 4% 1.2%;
 	margin: 10px;
@@ -234,3 +226,13 @@ option{
 	line-height: 2em;
 }
 
+p.date {
+	margin-top: 40px;
+}
+
+/*////////////////////// FOOTER ///////////////////////////*/
+
+//#footer {
+	border: solid 2px yellow;
+	margin-top: 1000px;
+}
